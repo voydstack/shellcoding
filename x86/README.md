@@ -1,6 +1,6 @@
-# Shellcodes x86
+# Shellcodes Linux x86
 
-Voici une collection de shellcodes pour x86, pour l'instant ceux-là sont disponibles j'en rajouterai sûrement à l'avenir.
+Voici une collection de shellcodes pour Linux x86, pour l'instant ceux-là sont disponibles j'en rajouterai sûrement à l'avenir.
 
 ### **[exit(0) (8 octets)](https://github.com/voydstack/shellcoding/tree/master/x86/exit)**
 

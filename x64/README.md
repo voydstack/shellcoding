@@ -1,6 +1,6 @@
-# Shellcodes x64
+# Shellcodes Linux x64
 
-Voici une collection de shellcodes pour x64, pour l'instant ceux-là sont disponibles j'en rajouterai sûrement à l'avenir.
+Voici une collection de shellcodes pour Linux x64, pour l'instant ceux-là sont disponibles j'en rajouterai sûrement à l'avenir.
 
 ### **[exit(0) (10 octets)](https://github.com/voydstack/shellcoding/tree/master/x64/exit)**
 
