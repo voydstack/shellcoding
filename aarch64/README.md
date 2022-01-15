@@ -42,3 +42,10 @@ Run shellcodes:
 ```sh
 ./executor [start offset] < shellcode.bin
 ```
+
+## References:
+
+- [https://modexp.wordpress.com/2018/10/30/arm64-assembly/](https://modexp.wordpress.com/2018/10/30/arm64-assembly/)
+- [https://modexp.wordpress.com/2017/09/11/shellcode-linux-aarch64/](https://modexp.wordpress.com/2017/09/11/shellcode-linux-aarch64/)
+- [https://thog.github.io/syscalls-table-aarch64/latest.html](https://thog.github.io/syscalls-table-aarch64/latest.html)
+- [https://developer.arm.com/documentation/102374/latest/](https://developer.arm.com/documentation/102374/latest/)
