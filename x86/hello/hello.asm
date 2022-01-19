@@ -7,25 +7,23 @@ _start:
 
 	hello:
 	
-	; write(1, "Hello, World !\n", 0x10)
+	; write(1, "Hello,World!", 0xc)
 	
-	xor eax, eax
 	xor ebx, ebx
-	xor edx, edx
-	mov al, 4
 	inc ebx
+
 	pop ecx
-	mov dl, 0x10
-
-	int 0x80
-
-	; exit(0)
 	
-	mov al, 1
-	dec ebx
+	xor edx, edx
+	mov dl, 0xc
+
+	push 4
+	pop eax ; SYS_write
 
 	int 0x80
+
+	db 0xff ; Invalid instruction to not loop
 
 	getstring:
 		call hello
-		db "Hello, World !", 0xa
+		db "Hello,World!"

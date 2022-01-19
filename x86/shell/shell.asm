@@ -3,20 +3,15 @@ section .text
 global _start
 
 _start:
-	jmp binsh
-
-	exec:
-	
 	; execve("/bin/sh", NULL, NULL)
-	
-	xor eax, eax
 	xor ecx, ecx
 	xor edx, edx
-	mov al, 0xb
-	pop ebx
+	
+	push edx
+	push 0x68732f2f ; //sh
+	push 0x6e69622f ; /bin
+	mov ebx, esp
 
+	push 0xb ; SYS_execve
+	pop eax
 	int 0x80
-
-	binsh:
-		call exec
-		db "/bin/sh"
