@@ -1,48 +1,55 @@
 # Shellcodes Linux ARMv7 (32 bits)
 
-Voici une collection de shellcodes pour Linux ARMv7, pour l'instant ceux-là sont disponibles j'en rajouterai sûrement à l'avenir.
+Linux ARMv7 shellcode collection without any nullbytes, spaces or newlines.
 
-### **[exit(0) (16 octets)](https://github.com/voydstack/shellcoding/tree/master/ARM32/exit)**
+### **[exit(0) (16 bytes)](https://github.com/voydstack/shellcoding/tree/master/ARM32/exit)**
 
-Sort du programme en cours d'exécution avec 0 en code de retour.
+Simply exits.
 
-### **[Hello, World (43 octets)](https://github.com/voydstack/shellcoding/tree/master/ARM32/hello)**
+### **[Hello, World (36 bytes)](https://github.com/voydstack/shellcoding/tree/master/ARM32/hello)**
 
-Affiche "Hello, World !\n" puis quitte le programme.
+Displays "Hello,World!".
 
-### **[/bin/sh (28 octets)](https://github.com/voydstack/shellcoding/tree/master/ARM32/shell)**
+### **[/bin/sh (28 bytes)](https://github.com/voydstack/shellcoding/tree/master/ARM32/shell)**
 
-Ouvre un shell sans fixer les permissions.
+Executes `execve("/bin/sh", NULL, NULL)`.
 
-### **[setreuid /bin/sh (40 octets)](https://github.com/voydstack/shellcoding/tree/master/ARM32/setreuid-shell)**
+### **[setreuid /bin/sh (40 bytes)](https://github.com/voydstack/shellcoding/tree/master/ARM32/setreuid-shell)**
 
-Ouvre un shell en fixant les permissions avec setreuid(1000, 1000).
+Executes `setreuid(1000, 1000); execve("/bin/sh", NULL, NULL)`.
 
-### **[bindshell (104 octets)](https://github.com/voydstack/shellcoding/tree/master/ARM32/bind-shell)**
+### **[bindshell (92 bytes)](https://github.com/voydstack/shellcoding/tree/master/ARM32/bind-shell)**
 
-Attache un shell au port 1337.
+Runs a bind-shell on port 4444.
 
-### **[reverse shell (84 octets)](https://github.com/voydstack/shellcoding/tree/master/ARM32/reverse-shell)**
+### **[reverse shell (72 bytes)](https://github.com/voydstack/shellcoding/tree/master/ARM32/reverse-shell)**
 
-Se connecte en retour à l'adresse 192.168.1.64 au port 1337.
+Runs a reverse shell on 127.0.0.1:4444.
 
-### **[read /etc/passwd (52 octets)](https://github.com/voydstack/shellcoding/tree/master/ARM32/readfile)**
+### **[read /etc/passwd (56 bytes)](https://github.com/voydstack/shellcoding/tree/master/ARM32/readfile)**
 
-Lit un fichier (dans ce cas là /etc/passwd) et affiche son contenu sur stdout.
+Reads a file (/etc/passwd in the shellcode).
 
-## Modifier et assembler un shellcode
+### **[read second stage (20 bytes)](https://github.com/voydstack/shellcoding/tree/master/ARM32/read-stage)**
 
-Pour modifier les shellcodes présents ici, par exemple pour changer le numéro de port, il suffit de faire la modification directement dans le code du shellcode, puis de l'assembler avec la commande:
+Reads a second stage shellcode next to it.
 
-```sh
-as shellcode.s -o shellcode.o && ld shellcode.o -N -o shellcode
-objcopy -O binary shellcode shellcode.bin && rm shellcode.o shellcode
+
+
+### Assemble shellcodes
+
+```
+arm-linux-gnueabihf-gcc shellcode.s -c && arm-linux-gnueabihf-ld shellcode.o -o shellcode
+arm-linux-gnueabihf-objcopy -O binary shellcode shellcode.bin && rm shellcode.o shellcode
 ```
 
-Pour le tester, on peut utiliser le programme executor qui va mapper une zone mémoire exécutable puis l'exécuter avec notre shellcode à l'intérieur.
+### Run shellcodes
 
-```sh
-cat shellcode.bin | ./executor
-# Ou encore
-./executor "$(cat shellcode.bin)"
 ```
+qemu-arm -L /usr/lib/arm-linux-gnueabihf/ ./executor < shellcode.bin
+```
+
+### References
+
+- [https://azeria-labs.com/writing-arm-shellcode/](https://azeria-labs.com/writing-arm-shellcode/)
+- https://www.ic.unicamp.br/~ranido/mc404/docs/ARMv7-cheat-sheet.pdf

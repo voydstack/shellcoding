@@ -1,6 +1,6 @@
-# Linux Shellcodes - MIPS (MIPS 32 bits, big endian)
+# Linux Shellcodes - RISC-V (64 bits)
 
-Here is a RISC-V space, newline and null-byte free shellcode collection.
+Linux RISC-V shellcode collection without any nullbytes, spaces or newlines.
 
 ### **[exit(0) (32 bytes)](https://github.com/voydstack/shellcoding/tree/master/risc-v/exit)**
 
@@ -32,7 +32,9 @@ Reads a file and displays its output to stdout.
 
 ### **[read second stage (38 bytes)](https://github.com/voydstack/shellcoding/tree/master/risc-v/read-stage)**
 
-Reads a second-stage shellcode next to it (position independent)
+Reads a second-stage shellcode next to it (position independent).
+
+
 
 ## Assemble shellcodes
 
@@ -41,7 +43,7 @@ riscv64-linux-gnu-gcc shellcode.s -c && riscv64-linux-gnu-ld shellcode.o -o shel
 riscv64-linux-gnu-objcopy -O binary shellcode shellcode.bin && rm shellcode.o shellcode
 ```
 
-Run shellcodes:
+### Run shellcodes:
 
 ```sh
 qemu-riscv64 -L /usr/riscv64-linux-gnu/ ./executor < shellcode.bin
@@ -54,3 +56,4 @@ qemu-riscv64 -L /usr/riscv64-linux-gnu/ ./executor < shellcode.bin
 - [https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf](https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf)
 - [https://modexp.wordpress.com/2017/09/11/shellcode-linux-risc-v/](https://modexp.wordpress.com/2017/09/11/shellcode-linux-risc-v/)
 - [https://î.fr/riscv-alphanumeric-shellcoding/defcon27_riscv-alphanumeric-shellcoding.pdf](https://î.fr/riscv-alphanumeric-shellcoding/defcon27_riscv-alphanumeric-shellcoding.pdf)
+

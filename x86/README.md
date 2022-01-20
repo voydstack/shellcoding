@@ -1,6 +1,6 @@
-# Shellcodes Linux x86
+# Linux x86 Shellcodes
 
-x86 shellcode collection without any nullbytes, spaces or newlines.
+Linux x86 shellcode collection without any nullbytes, spaces or newlines.
 
 ### **[exit(0) (7 bytes)](https://github.com/voydstack/shellcoding/tree/master/x86/exit)**
 
@@ -34,8 +34,7 @@ Reads a file (/etc/passwd in the shellcode).
 
 Reads a second stage shellcode next to it.
 
-
-Assemble shellcodes:
+### Assemble shellcodes:
 
 ```sh
 ./assemble.sh # Assembles every shellcodes in this directory
@@ -43,7 +42,7 @@ Assemble shellcodes:
 nasm -f bin shellcode.asm -o shellcode.bin
 ```
 
-To test shellcodes:
+### Run shellcodes:
 
 ```sh
 ./executor < shellcode.bin

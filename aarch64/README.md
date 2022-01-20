@@ -1,6 +1,6 @@
-# Linux Shellcodes - aarch64 (ARM 64 bits)
+# Linux aarch64 Shellcodes (ARM 64 bits)
 
-Here is a aarch64 nullbyte-free shellcode collection.
+Linux aarch64 shellcode collection without any nullbytes, spaces or newlines.
 
 ### **[exit(0) (12 bytes)](https://github.com/voydstack/shellcoding/tree/master/aarch64/exit)**
 
@@ -41,7 +41,7 @@ aarch64-linux-gnu-as shellcode.s -o shellcode.o && aarch64-linux-gnu-ld shellcod
 aarch64-linux-gnu-objcopy -O binary shellcode shellcode.bin && rm shellcode.o shellcode
 ```
 
-Run shellcodes:
+### Run shellcodes:
 
 ```sh
 ./executor [start offset] < shellcode.bin

@@ -1,6 +1,6 @@
-# Linux Shellcodes - MIPS (MIPS 32 bits, big endian)
+# Linux MIPS Shellcodes - (32 bits, big endian)
 
-MIPS shellcode collection without any nullbytes, spaces or newlines.
+Linux MIPS shellcode collection without any nullbytes, spaces or newlines.
 
 ### **[exit(0) (12 bytes)](https://github.com/voydstack/shellcoding/tree/master/mips32/exit)**
 
@@ -39,7 +39,7 @@ mips-linux-gnu-objcopy -O binary shellcode shellcode.bin && rm shellcode.o shell
 ./assemble.sh
 ```
 
-Run shellcodes:
+### Run shellcodes:
 
 ```sh
 ./executor [start offset] < shellcode.bin
