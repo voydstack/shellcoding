@@ -4,8 +4,10 @@ global _start
 
 _start:
 	; exit(0)
-	xor rax, rax
-	mov al, 0x3c
+
 	xor rdi, rdi
+
+	push 0x3c
+	pop rax ; SYS_exit
 	
 	syscall

