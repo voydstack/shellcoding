@@ -15,15 +15,14 @@ int main(int argc, char *argv[]) {
 		perror("[-] mmap");
 		exit(1);
 	}
+	
+	read(0, shellcode, SHELLCODE_SIZE);
 
-	if(argc == 1) {
-		read(0, shellcode, SHELLCODE_SIZE);
-	} else if(argc == 2) {
-		strncpy((char *) shellcode, argv[1], SHELLCODE_SIZE - 1);
+	if(argc == 2) {
+		shellcode += atoi(argv[1]);
 	}
-
+	
 	shellcode();
 
 	return 0;
 }
-
