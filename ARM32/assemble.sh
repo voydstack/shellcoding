@@ -6,6 +6,6 @@ do
     arm-linux-gnueabihf-gcc $file -c -o $filename.o
     arm-linux-gnueabihf-ld $filename.o -o $filename
     arm-linux-gnueabihf-objcopy -O binary $filename $filename.bin
-    rm $filename.o
+    rm $filename $filename.o
     python ../shellconvert.py $filename.bin > $filename.hex
 done
