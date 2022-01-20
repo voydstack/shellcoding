@@ -6,7 +6,7 @@ Here is a aarch64 nullbyte-free shellcode collection.
 
 Simply exits.
 
-### **[Hello, World (56 bytes)](https://github.com/voydstack/shellcoding/tree/master/aarch64/hello)**
+### **[Hello, World (48 bytes)](https://github.com/voydstack/shellcoding/tree/master/aarch64/hello)**
 
 Displays "Hello World!\n" then exits.
 
@@ -29,6 +29,10 @@ Classic reverse shell.
 ### **[read /etc/passwd (112 bytes)](https://github.com/voydstack/shellcoding/tree/master/aarch64/readfile)**
 
 Reads file and displays its output to stdout.
+
+### **[read second stage (32 bytes)](https://github.com/voydstack/shellcoding/tree/master/aarch64/read-stage)**
+
+Reads a second-stage shellcode next to it (position independent)
 
 ## Assemble shellcodes
 
